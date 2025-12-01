@@ -1,0 +1,144 @@
+/* src/admin.css */
+
+.admin-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d1124, #0c0f18);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.admin-card {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 32px 40px;
+  box-sizing: border-box;
+}
+
+.admin-title {
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  text-shadow: 0 0 12px #00eaff;
+}
+
+.admin-subtitle {
+  font-size: 15px;
+  opacity: 0.78;
+  margin: 0 0 18px 0;
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-count {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.admin-button {
+  background: linear-gradient(135deg, #00eaff, #005eff);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  text-shadow: 0 0 4px #fff;
+  box-shadow: 0 0 10px #00eaff;
+  transition: 0.25s ease;
+}
+
+.admin-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 18px #00eaff;
+}
+
+.admin-table-wrapper {
+  max-height: 70vh;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+  font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 14px 18px;
+  vertical-align: top;
+}
+
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: rgba(8, 12, 20, 0.8);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-table tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admin-error {
+  color: #ff6b6b;
+  margin-top: 10px;
+}
+
+.admin-loading {
+  color: #b3e5ff;
+}
+
+.admin-nodata {
+  opacity: 0.85;
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .admin-card {
+    padding: 24px;
+  }
+
+  .admin-title {
+    font-size: 26px;
+  }
+
+  .admin-table {
+    min-width: 700px;
+  }
+
+  .admin-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Large Displays */
+@media (min-width: 1500px) {
+  .admin-card {
+    max-width: 1600px;
+  }
+}

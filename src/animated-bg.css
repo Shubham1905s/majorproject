@@ -1,0 +1,24 @@
+/* Animated Futuristic Gradient */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.dynamic-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(-45deg, #12001b, #001a33, #230046, #002b43);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  z-index: -1;
+  filter: blur(1px);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
+import "./admin.css";
 
 function Admin() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -9,109 +10,73 @@ function Admin() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchFeedbacks = async () => {
-      setLoading(true);
-      setError("");
-
+    const fetchData = async () => {
       try {
-        // Get documents from "feedbacks" collection, newest first
-        const q = query(
-          collection(db, "feedbacks"),
-          orderBy("createdAt", "desc")
-        );
+        const q = query(collection(db, "feedbacks"), orderBy("createdAt", "desc"));
         const snapshot = await getDocs(q);
 
         const rows = snapshot.docs.map((doc) => {
-          const data = doc.data();
+          const d = doc.data();
           return {
             id: doc.id,
-            name: data.name || "",
-            email: data.email || "",
-            rating: data.rating || "",
-            feedback: data.feedback || "",
-            createdAt: data.createdAt?.toDate
-              ? data.createdAt.toDate().toLocaleString()
+            name: d.name,
+            email: d.email,
+            rating: d.rating,
+            feedback: d.feedback,
+            createdAt: d.createdAt?.toDate
+              ? d.createdAt.toDate().toLocaleString()
               : "",
           };
         });
 
         setFeedbacks(rows);
       } catch (err) {
-        console.error(err);
-        setError("Failed to load feedback. Check console for details.");
+        setError("Could not fetch feedback data.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeedbacks();
+    fetchData();
   }, []);
 
-  const downloadCSV = () => {
-    if (!feedbacks.length) {
-      alert("No feedback to export.");
-      return;
-    }
-
-    const headers = ["id", "name", "email", "rating", "feedback", "createdAt"];
-
-    const escapeValue = (value) => {
-      if (value === null || value === undefined) return "";
-      const stringValue = String(value).replace(/"/g, '""');
-      // Wrap in quotes if it contains comma, quote, or newline
-      if (/[",\n]/.test(stringValue)) {
-        return `"${stringValue}"`;
-      }
-      return stringValue;
-    };
-
-    const rows = feedbacks.map((row) =>
-      headers.map((h) => escapeValue(row[h])).join(",")
-    );
-
-    const csvContent = [headers.join(","), ...rows].join("\n");
-
-    const blob = new Blob([csvContent], {
-      type: "text/csv;charset=utf-8;",
-    });
-
+  const exportCSV = () => {
+    if (!feedbacks.length) return alert("No records found.");
+    const headers = ["name", "email", "rating", "feedback", "createdAt"];
+    const csv = [headers.join(","), ...feedbacks.map(f =>
+      headers.map(h => `"${(f[h] || "").replace(/"/g, '""')}"`).join(",")
+    )].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.setAttribute("download", "feedbacks.csv");
-    document.body.appendChild(a);
+    a.download = "feedbacks.csv";
     a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    a.remove();
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Admin – Feedback List</h1>
-        <p style={styles.subtitle}>
-          View all submitted feedback and download as CSV.
+    <div className="admin-page">
+      <div className="admin-card">
+        <h1 className="admin-title">📊 Admin Dashboard</h1>
+        <p className="admin-subtitle">
+          View, manage and export user feedback records.
         </p>
 
-        <div style={styles.topBar}>
-          <button style={styles.button} onClick={downloadCSV}>
-            ⬇️ Download CSV
-          </button>
-          <span style={{ fontSize: "13px", color: "#64748b" }}>
-            Total feedbacks: {feedbacks.length}
-          </span>
+        <div className="admin-topbar">
+          <button className="admin-button" onClick={exportCSV}>⬇️ Export CSV</button>
+          <span className="admin-count">Total Feedbacks: {feedbacks.length}</span>
         </div>
 
-        {loading && <p>Loading feedback...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
+        {loading && <p className="admin-loading">⏳ Loading feedback...</p>}
+        {error && <p className="admin-error">{error}</p>}
         {!loading && !feedbacks.length && (
-          <p>No feedback found yet. Ask someone to submit the form 🙂</p>
+          <p className="admin-nodata">No feedback yet. Encourage users to submit!</p>
         )}
 
         {!loading && feedbacks.length > 0 && (
-          <div style={styles.tableWrapper}>
-            <table style={styles.table}>
+          <div className="admin-table-wrapper">
+            <table className="admin-table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -122,13 +87,13 @@ function Admin() {
                 </tr>
               </thead>
               <tbody>
-                {feedbacks.map((fb) => (
-                  <tr key={fb.id}>
-                    <td>{fb.name}</td>
-                    <td>{fb.email}</td>
-                    <td>{fb.rating}</td>
-                    <td>{fb.feedback}</td>
-                    <td>{fb.createdAt}</td>
+                {feedbacks.map((f) => (
+                  <tr key={f.id}>
+                    <td>{f.name}</td>
+                    <td>{f.email}</td>
+                    <td>{f.rating}</td>
+                    <td>{f.feedback}</td>
+                    <td>{f.createdAt}</td>
                   </tr>
                 ))}
               </tbody>
@@ -139,66 +104,5 @@ function Admin() {
     </div>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background:
-      "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(236,72,153,0.2))",
-    padding: "20px",
-    fontFamily:
-      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  },
-  card: {
-    width: "100%",
-    maxWidth: "900px",
-    background: "#ffffff",
-    borderRadius: "16px",
-    padding: "24px",
-    boxShadow: "0 10px 30px rgba(15, 23, 42, 0.12)",
-  },
-  title: {
-    fontSize: "24px",
-    fontWeight: "700",
-    marginBottom: "4px",
-    color: "#0f172a",
-  },
-  subtitle: {
-    fontSize: "14px",
-    color: "#64748b",
-    marginBottom: "16px",
-  },
-  topBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "12px",
-  },
-  button: {
-    padding: "8px 14px",
-    borderRadius: "999px",
-    border: "none",
-    background:
-      "linear-gradient(135deg, rgb(59,130,246), rgb(79,70,229))",
-    color: "white",
-    fontWeight: "600",
-    fontSize: "14px",
-    cursor: "pointer",
-  },
-  tableWrapper: {
-    maxHeight: "400px",
-    overflow: "auto",
-    borderRadius: "12px",
-    border: "1px solid #e2e8f0",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    fontSize: "13px",
-  },
-};
 
 export default Admin;

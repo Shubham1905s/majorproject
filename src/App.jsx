@@ -3,13 +3,18 @@ import { db } from "./firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import Admin from "./admin";
 import AdminLogin from "./adminlogin";
+import Developers from "./Developers";
+import "./animated-bg.css";
 
 function App() {
   // form | login | admin
   const [view, setView] = useState("form");
 
-  const goToLogin = () => setView("login");     // when clicking Admin button
-  const loginSuccess = () => setView("admin");  // after correct login
+  const goToLogin = () => setView("login");
+  const loginSuccess = () => setView("admin");
+
+  // NEW STATE FOR DEVELOPERS PAGE
+  const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -47,6 +52,10 @@ function App() {
         rating: "",
         feedback: "",
       });
+
+      // 👇 SHOW DEVELOPERS PAGE AFTER SUBMISSION
+      setSubmitted(true);
+
     } catch (error) {
       console.error(error);
       setStatus("❌ Something went wrong. Please try again.");
@@ -60,14 +69,16 @@ function App() {
     return <AdminLogin onLogin={loginSuccess} />;
   }
 
-  // 2️⃣ ADMIN PAGE (ONLY AFTER LOGIN)
+  // 2️⃣ SHOW DEVELOPERS PAGE IF SUBMITTED
+  if (submitted) {
+    return <Developers backToForm={() => setSubmitted(false)} />;
+  }
+
+  // 3️⃣ ADMIN PAGE
   if (view === "admin") {
     return (
       <>
-        <button
-          onClick={() => setView("form")}
-          style={styles.backBtn}
-        >
+        <button onClick={() => setView("form")} style={styles.backBtn}>
           ← Back to Form
         </button>
         <Admin />
@@ -75,20 +86,15 @@ function App() {
     );
   }
 
-  // 3️⃣ DEFAULT VIEW — FEEDBACK FORM
+  // 4️⃣ DEFAULT FEEDBACK FORM
   return (
     <div style={styles.page}>
-      <button
-        onClick={goToLogin}
-        style={styles.adminBtn}
-      >
-        Admin
-      </button>
+      <div className="dynamic-bg"></div>
+      <button onClick={goToLogin} style={styles.adminBtn}>Admin</button>
 
       <div style={styles.card}>
         <h1 style={styles.title}>Feedback Form</h1>
         <p style={styles.subtitle}>We’d love to hear your thoughts!</p>
-
         <form onSubmit={handleSubmit} style={styles.form}>
           <label style={styles.label}>
             Name
@@ -158,15 +164,17 @@ function App() {
 }
 
 const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(236,72,153,0.2))",
-    padding: "20px",
-    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  },
+page: {
+  minHeight: "100vh",
+  width: "100vw",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "linear-gradient(135deg, #1f003d, #0e192d, #000)",
+  padding: "20px",
+  boxSizing: "border-box",
+  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+},
   adminBtn: {
     position: "fixed",
     top: 12,
