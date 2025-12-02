@@ -164,17 +164,18 @@ function App() {
 }
 
 const styles = {
-page: {
-  minHeight: "100vh",
-  width: "100vw",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  background: "linear-gradient(135deg, #1f003d, #0e192d, #000)",
-  padding: "20px",
-  boxSizing: "border-box",
-  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-},
+  page: {
+    minHeight: "100vh",
+    width: "100vw",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "linear-gradient(135deg, #1f003d, #0e192d, #000)",
+    padding: "20px",
+    boxSizing: "border-box",
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  },
+
   adminBtn: {
     position: "fixed",
     top: 12,
@@ -187,6 +188,7 @@ page: {
     cursor: "pointer",
     zIndex: 10,
   },
+
   backBtn: {
     position: "fixed",
     top: 12,
@@ -199,44 +201,62 @@ page: {
     cursor: "pointer",
     zIndex: 10,
   },
+
   card: {
     width: "100%",
     maxWidth: "480px",
-    background: "#fff",
+    background: "rgba(255,255,255,0.1)",
     borderRadius: "16px",
     padding: "24px 24px 28px",
-    boxShadow: "0 10px 30px rgba(15, 23, 42, 0.12)",
+    boxShadow: "0 0 25px rgba(0, 238, 255, 0.4)",
+    border: "1px solid rgba(255,255,255,0.2)",
+    backdropFilter: "blur(10px)",
   },
+
+  // ⭐ CENTERED HEADING + WHITE TEXT
   title: {
-    fontSize: "24px",
+    textAlign: "center",
+    fontSize: "30px",
     fontWeight: "700",
-    marginBottom: "4px",
-    color: "#0f172a",
+    marginBottom: "6px",
+    color: "white",
+    textShadow: "0 0 10px #00eaff",
   },
+
   subtitle: {
-    fontSize: "14px",
-    color: "#64748b",
+    textAlign: "center",
+    fontSize: "15px",
+    color: "rgba(255,255,255,0.7)",
     marginBottom: "20px",
   },
+
   form: {
     display: "flex",
     flexDirection: "column",
     gap: "12px",
   },
+
   label: {
     fontSize: "14px",
     fontWeight: "500",
-    color: "#0f172a",
+    color: "white",
     display: "flex",
     flexDirection: "column",
     gap: "4px",
   },
+
+  // ⭐ INPUT TEXT WHITE
   input: {
-    padding: "8px 10px",
+    padding: "10px 12px",
     borderRadius: "10px",
-    border: "1px solid #e2e8f0",
+    border: "1px solid rgba(255,255,255,0.4)",
+    background: "rgba(255,255,255,0.1)",
+    color: "#0e0e0e", // <-- TEXT WHITE
     fontSize: "14px",
+    outline: "none",
+    backdropFilter: "blur(6px)",
   },
+
   button: {
     marginTop: "8px",
     padding: "10px 14px",
@@ -247,12 +267,16 @@ page: {
     fontWeight: "600",
     fontSize: "14px",
     cursor: "pointer",
+    boxShadow: "0 0 12px rgba(59,130,246,0.6)",
   },
+
   status: {
     marginTop: "10px",
     fontSize: "14px",
-    color: "#0f172a",
+    color: "white",
+    textAlign: "center",
   },
 };
+
 
 export default App;
