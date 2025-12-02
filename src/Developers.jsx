@@ -18,7 +18,7 @@ const developers = [
    img: "/devs/dev3.png",
     desc: "Backend magician turning data into powerful solutions.\nPassionate about scalable systems and clean architecture.",
     whatsapp: "https://wa.me/+918277720801",
-    instagram: "https://instagram.com/pranav70",
+    instagram: "https://www.instagram.com/pranavsk70?igsh=MWNvZGxxeWt4cnM2Nw==",
     linkedin: "https://linkedin.com/pranav-kadagadakai",
     email: "pkadagadakai@proton.me",
   },
